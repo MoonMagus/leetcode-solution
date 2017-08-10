@@ -111,21 +111,31 @@ void releaseData() {
 class Solution {
 public:
     vector<string> generateParenthesis(int n) {
-        if (n == 0)
-            return vector<string>(1, "");
-
-        if (n == 1)
-            return vector<string>(1, "()");
-
         vector<string> results;
-        for (int i = 0; i < n; ++i) {
-            for (auto inner : generateParenthesis(i)) {
-                for (auto outer : generateParenthesis(n - i - 1))
-                    results.push_back("(" + inner + ")" + outer);
-            }
-        }
+        string path;
+        if (n > 0)
+            generate(results, path, 0, 0, n);
 
         return results;
+    }
+
+private:
+    void generate(vector<string>& results, string& path, int l, int r, int n) {
+        if (l == n) {
+            string s(path);
+            results.push_back(s.append(n - r, ')'));
+            return;
+        }
+
+        path.push_back('(');
+        generate(results, path, l + 1, r, n);
+        path.pop_back();
+
+        if (l > r) {
+            path.push_back(')');
+            generate(results, path, l, r + 1, n);
+            path.pop_back();
+        }
     }
 };
 
