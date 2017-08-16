@@ -109,21 +109,22 @@ void releaseData() {
 // *********************************************************************************************************
 class Solution {
 public:
-    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-        return buildTree(begin(postorder), end(postorder), begin(inorder), end(inorder));
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return buildTree(begin(preorder), end(preorder), begin(inorder), end(inorder));
     }
 
+private:
     template<typename Iterator>
-    TreeNode* buildTree(Iterator post_first, Iterator post_last, Iterator in_first, Iterator in_last) {
-        if (post_first == post_last) return NULL;
-        if (in_first == in_last) return NULL;
-        TreeNode* root = new TreeNode(*prev(post_last));
+    TreeNode* buildTree(Iterator pre_first, Iterator prev_last, Iterator in_first, Iterator in_last) {
+        if (pre_first == prev_last || in_first == in_last)
+            return NULL;
 
-        Iterator inRootPos = find(in_first, in_last, *prev(post_last));
+        Iterator inRootPos = find(in_first, in_last, *pre_first);
         int left_size = distance(in_first, inRootPos);
 
-        root->left = buildTree(post_first, next(post_first, left_size), in_first, next(in_first, left_size));
-        root->right = buildTree(next(post_first, left_size), prev(post_last), next(inRootPos), in_last);
+        TreeNode* root = new TreeNode(*pre_first);
+        root->left = buildTree(next(pre_first), next(pre_first, left_size + 1), in_first, next(in_first, left_size));
+        root->right = buildTree(next(pre_first, left_size + 1), prev_last, next(in_first, left_size + 1), in_last);
 
         return root;
     }
