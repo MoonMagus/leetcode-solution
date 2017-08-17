@@ -9,23 +9,24 @@ using namespace std;
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
-        int left = 0;
-        int right = nums.size() - 1;
-        while (left <= right) {
-            int middle = (left + right) / 2;
-            if (nums[middle] == target)
-                return middle;
-            else if (nums[middle] >= nums[0]) {
-                if (target < nums[0] || target > nums[middle])
-                    left = middle + 1;
+        const int n = nums.size();
+        int l = 0;
+        int r = n - 1;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (nums[m] == target)
+                return m;
+            else if (nums[m] >= nums[l]) {
+                if (target >= nums[l] && target <= nums[m])
+                    r = m - 1;
                 else
-                    right = middle - 1;
+                    l = m + 1;
             }
-            else if (nums[middle] <= nums[right]) {
-                if (target <= nums[middle] || target > nums[right])
-                    right = middle - 1;
+            else {
+                if (target >= nums[m] && target <= nums[r])
+                    l = m + 1;
                 else
-                    left = middle + 1;
+                    r = m - 1;
             }
         }
 
