@@ -8,29 +8,35 @@ using namespace std;
 
 class Solution {
 public:
-    int search(vector<int>& nums, int target) {
+    bool search(vector<int>& nums, int target) {
         const int n = nums.size();
         int l = 0;
         int r = n - 1;
         while (l <= r) {
             int m = l + (r - l) / 2;
             if (nums[m] == target)
-                return m;
-            else if (nums[m] >= nums[l]) {
+                return true;
+            else if (nums[m] > nums[l] || nums[m] > nums[r]) {
+                // Ascent: [l, m - 1].
                 if (target >= nums[l] && target <= nums[m])
                     r = m - 1;
                 else
                     l = m + 1;
             }
-            else {
-                if (target >= nums[m] && target <= nums[r])
+            else if (nums[m] < nums[l] || nums[m] < nums[r]) {
+                // Ascent: [m + 1, r].
+                if (target > nums[m] && target <= nums[r])
                     l = m + 1;
                 else
                     r = m - 1;
             }
+            else {
+                ++l;
+                --r;
+            }
         }
 
-        return -1;
+        return false;
     }
 };
 
