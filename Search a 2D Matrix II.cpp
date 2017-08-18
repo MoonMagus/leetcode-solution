@@ -10,6 +10,7 @@
 #include <list>
 #include <stack>
 #include <queue>
+#include <unordered_Set>
 using namespace std;
 
 struct ListNode {
@@ -37,6 +38,13 @@ struct TreeLinkNode {
     TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
 };
 
+struct Interval {
+    int start;
+    int end;
+    Interval() : start(0), end(0) {}
+    Interval(int s, int e) : start(s), end(e) {}
+};
+
 vector<vector<int>> initializeData(int lineCount = 1) {
     freopen("C:\\Users\\fengy\\Desktop\\io\\in.txt", "r", stdin); //输入重定向，输入数据将从in.txt文件中读取   
     freopen("C:\\Users\\fengy\\Desktop\\io\\\\out.txt", "w", stdout); //输出重定向，输出数据将保存在out.txt文件中   
@@ -55,8 +63,8 @@ vector<vector<int>> initializeData(int lineCount = 1) {
 }
 
 void printData(vector<vector<int>>& v) {
-    for (int i = 0; i < v.length(); ++i) {
-        for (int j = 0; j < v[i].length(); ++j)
+    for (int i = 0; i < v.size(); ++i) {
+        for (int j = 0; j < v[i].size(); ++j)
             cout << v[i][j] << " ";
         cout << endl;
     }
@@ -106,7 +114,6 @@ void releaseData() {
     fclose(stdout);        //关闭文件   
 }
 
-// *********************************************************************************************************
 class Solution {
 public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) {
@@ -132,7 +139,8 @@ public:
 };
 
 int main() {
-    vector<ListNode*> list = initializeList();
+    vector<vector<int>> v = initializeData(1);
+    Solution so;
 
     releaseData();
     return 0;
