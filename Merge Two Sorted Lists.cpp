@@ -125,12 +125,7 @@ public:
             rear = rear->next;
         }
 
-        ListNode* l = l1 ? l1 : l2;
-        while (l) {
-            rear->next = l;
-            rear = rear->next;
-            l = l->next;
-        }
+        rear->next = l1 == NULL ? l2 : l1;
 
         return guard.next;
     }
