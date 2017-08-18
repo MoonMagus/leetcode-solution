@@ -110,39 +110,64 @@ void releaseData() {
 class Solution {
 public:
     vector<int> searchRange(vector<int>& nums, int target) {
-        auto lower = find_lower_bound(begin(nums), end(nums), target);
-        auto upper = find_upper_bound(begin(nums), end(nums), target);
-        if (lower == end(nums) || *lower != target)
-            return{ -1,-1 };
-        else
-            return{ distance(begin(nums), lower), distance(begin(nums), upper) };
+        vector<int> result;
+        result.push_back(lower_bound(nums, target));
+        result.push_back(upper_bound(nums, target));
+
+        return result;
     }
 
 private:
-    template<typename Iterator>
-    Iterator find_lower_bound(Iterator first, Iterator last, int target) {
-        while (first < last) {
-            Iterator mid = first + distance(first, last) / 2;
-            if (*mid < target)
-                first = ++mid;
+    int lower_bound(vector<int>& nums, int target) {
+        const int n = nums.size();
+        int l = 0;
+        int r = n - 1;
+        // Maintenance: 1. if [l, r] include target, which must keep the lower_bound of target.
+        //              2. if [l, r] not include target.
+        //                 <1>. if target ever exists, then [l, r] <= target, when terminated, l will be valid index lower_bound index of [0, n -1].
+        //                 <2>. if target never exists, then l will be invalid n (next value to end of array), or valid index of [0, n - 1].
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (target > nums[m])
+                // [m + 1, r] includes region [target_begin, target_end], this step only delete unecessary elements for target.
+                l = m + 1;
+            else if (target < nums[m])
+                // [l, m - 1] includes region [target_begin, target_end], this step only delete unecessary elements for target.
+                r = m - 1;
             else
-                last = mid;
+                // [l, m - 1] include region [-oo, target] which will cut off existed target elements,
+                // which each value of [-oo, target].
+                r = m - 1;
         }
 
-        return first;
+        if (l < n && nums[l] == target)
+            return l;
+        else
+            return -1;
     }
 
-    template<typename Iterator>
-    Iterator find_upper_bound(Iterator first, Iterator last, int target) {
-        while (first < last) {
-            Iterator mid = first + distance(first, last) / 2;
-            if (*mid <= target)
-                first = ++mid;
+    // Maintenance: 1. if [l, r] include target, which must keep the upper_bound of target.
+    //              2. if [l, r] not include target.
+    //                 <1>. if target ever exists, then [l, r] >= target, when terminated, r will be valid index upper_bound index of [0, n -1].
+    //                 <2>. if target never exists, then r will be invalid -1 (prev value to begin of array), or valid index of [0, n - 1].
+    int upper_bound(vector<int>& nums, int target) {
+        const int n = nums.size();
+        int l = 0;
+        int r = n - 1;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (target < nums[m])
+                r = m - 1;
+            else if (target > nums[m])
+                l = m + 1;
             else
-                last = mid;
+                l = m + 1;
         }
 
-        return prev(first);
+        if (r >= 0 && nums[r] == target)
+            return r;
+        else
+            return -1;
     }
 };
 
