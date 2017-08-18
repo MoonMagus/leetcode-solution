@@ -111,22 +111,43 @@ void releaseData() {
 class Solution {
 public:
     double myPow(double x, int n) {
-        return power(x, n);
+        if (isEqual(x, 0.0) && n < 0) {
+            // throw exception("Invalid input: base is zero and exponent is negative!!");
+        }
+
+        if (n < 0) {
+            unsigned int exponent = (unsigned int)(-n);
+
+            return 1.0 / pow(x, exponent);
+        }
+        else {
+            unsigned int exponent = (unsigned int)(n);
+
+            return pow(x, exponent);
+        }
     }
 
 private:
-    double power(double x, long long n) {
+    double pow(double x, unsigned int n) {
+        if (isEqual(x, 0.0))
+            return 0.0;
+
         if (n == 0)
             return 1.0;
 
-        if (n < 0)
-            return 1.0 / power(x, -n);
-
-        double v = power(x, n / 2);
-        if (n % 2 == 0)
-            return v*v;
+        double v = pow(x, n >> 1);
+        if (n & 0x1)
+            return v * v * x;
         else
-            return v*v*x;
+            return v * v;
+    }
+
+    bool isEqual(double a, double b) {
+        const double ellipsis = 0.000000001;
+        if (abs(a - b) < ellipsis)
+            return true;
+
+        return false;
     }
 };
 
