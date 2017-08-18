@@ -109,40 +109,19 @@ void releaseData() {
 // *********************************************************************************************************
 class Solution {
 public:
-    vector<int> searchRange(vector<int>& nums, int target) {
-        auto lower = find_lower_bound(begin(nums), end(nums), target);
-        auto upper = find_upper_bound(begin(nums), end(nums), target);
-        if (lower == end(nums) || *lower != target)
-            return{ -1,-1 };
-        else
-            return{ distance(begin(nums), lower), distance(begin(nums), upper) };
-    }
-
-private:
-    template<typename Iterator>
-    Iterator find_lower_bound(Iterator first, Iterator last, int target) {
-        while (first < last) {
-            Iterator mid = first + distance(first, last) / 2;
-            if (*mid < target)
-                first = ++mid;
+    int searchInsert(vector<int>& nums, int target) {
+        const int n = nums.size();
+        int l = 0;
+        int r = n - 1;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (target > nums[m])
+                l = m + 1;
             else
-                last = mid;
+                r = m - 1;
         }
 
-        return first;
-    }
-
-    template<typename Iterator>
-    Iterator find_upper_bound(Iterator first, Iterator last, int target) {
-        while (first < last) {
-            Iterator mid = first + distance(first, last) / 2;
-            if (*mid <= target)
-                first = ++mid;
-            else
-                last = mid;
-        }
-
-        return prev(first);
+        return l;
     }
 };
 
