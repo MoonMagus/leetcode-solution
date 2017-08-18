@@ -88,21 +88,30 @@ void releaseData() {
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        if (head == NULL || n == 0)
+        // Unexpected condition, return directly without process.
+        if (head == NULL || n <= 0)
             return head;
-    
+
         ListNode guard(-1);
         guard.next = head;
         ListNode* fast = &guard;
         ListNode* slow = &guard;
-        while (n--)
-            fast = fast->next;
 
+        // Obtain the fast pointer. If nodes count less than n, return directly without process. 
+        for (int i = 0; i < n; ++i) {
+            fast = fast->next;
+            if (fast == NULL)
+                return head;
+        }
+
+        // When terminated, slow pointer will point to prev of delete node.
         while (fast->next) {
             fast = fast->next;
             slow = slow->next;
         }
 
+        // ListNode* node = slow->next;
+        // delete node;
         slow->next = slow->next->next;
 
         return guard.next;
