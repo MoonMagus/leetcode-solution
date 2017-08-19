@@ -107,18 +107,26 @@ void releaseData() {
     fclose(stdout);        //关闭文件   
 }
 
+// T: O(n), S: O(1).
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-        int n = nums.size();
-        int result = INT_MIN;
+        const int n = nums.size();
+        /*if (n == 0)
+        throw exception("invalid input");*/
+
+        int max_mum = INT_MIN;
         int f = 0;
         for (int i = 0; i < n; ++i) {
-            f = max(f + nums[i], nums[i]);
-            result = max(result, f);
+            if (f > 0)
+                f += nums[i];
+            else
+                f = nums[i];
+
+            max_mum = max(f, max_mum);
         }
 
-        return result;
+        return max_mum;
     }
 };
 
