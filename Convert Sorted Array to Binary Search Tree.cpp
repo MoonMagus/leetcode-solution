@@ -110,18 +110,17 @@ void releaseData() {
 class Solution {
 public:
     TreeNode* sortedArrayToBST(vector<int>& nums) {
-        return convert(begin(nums), end(nums));
+        return convert(begin(nums), nums.size());
     }
 
-    template<typename Iterator>
-    TreeNode* convert(Iterator first, Iterator last) {
-        if (first == last)
+private:
+    TreeNode* convert(vector<int>::iterator start, int n) {
+        if (n <= 0)
             return NULL;
 
-        const int length = distance(first, last);
-        TreeNode* root = new TreeNode(*next(first, length / 2));
-        root->left = convert(first, next(first, length / 2));
-        root->right = convert(next(first, length / 2 + 1), last);
+        TreeNode* root = new TreeNode(start[n / 2]);
+        root->left = convert(start, n / 2);
+        root->right = convert(next(start, n / 2 + 1), n - n / 2 - 1);
 
         return root;
     }
