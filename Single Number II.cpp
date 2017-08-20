@@ -131,13 +131,13 @@ public:
         int one = 0;
         int two = 0;
         int three = 0;
-        for (auto num: nums) {
+        for (auto num : nums) {
             three = two & num;
             two = two | one & num;
             one = one | num;
 
             // Update remainder of three, which should store at one and two.
-            one = one & ~three;
+            one = one & ~two;
             two = two & ~three;
         }
 
